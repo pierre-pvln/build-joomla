@@ -18,3 +18,4 @@ extensionname\00_dev_code       folder with the code for the Joomla! extension,
              \08_sources        folder with relevant information links and inspiration
                                 used to create the extension
 ``` 
+
