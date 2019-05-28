@@ -8,6 +8,7 @@
 ::           2017 03 26 - module name as variable included
 ::           2018 02 09 - folderstructure and updateserver changed 
 ::           2018 07 24 - build process unified and extension as environment variable
+::           2019 05 28 - updated to new structure 
 
 @ECHO off
 SETLOCAL ENABLEEXTENSIONS
@@ -28,8 +29,9 @@ SET ERROR_MESSAGE=errorfree
 
 :: STATIC VARIABLES
 :: ================
-CD ..\04_settings\
 
+CD "%cmd_dir%"
+CD ..\_set\
 IF EXIST 00_name.cmd (
    CALL 00_name.cmd
 ) ELSE (
@@ -37,6 +39,8 @@ IF EXIST 00_name.cmd (
    GOTO ERROR_EXIT
 )
 
+CD "%cmd_dir%"
+CD ..\_set\
 IF EXIST 02_version.cmd (
    CALL 02_version.cmd
 ) ELSE (
@@ -44,6 +48,8 @@ IF EXIST 02_version.cmd (
    GOTO ERROR_EXIT
 )
 
+CD "%cmd_dir%"
+CD ..\_set\
 IF EXIST 04_folders.cmd (
    CALL 04_folders.cmd
 ) ELSE (
@@ -53,30 +59,26 @@ IF EXIST 04_folders.cmd (
 
 :: STATIC VARIABLES
 :: ================
-::CALL ..\04_settings\00_name.cmd
-::CALL ..\04_settings\02_version.cmd
-::CALL ..\04_settings\04_folders.cmd
-
 
 :: Check if required environment variables are set correctly
 ::
 IF "%extension%"=="" (
-   SET ERROR_MESSAGE=extension not defined in ..\04_settings\00_name.cmd
+   SET ERROR_MESSAGE=extension not defined in ..\_set\00_name.cmd
    GOTO ERROR_EXIT
    )
 
 IF "%version%"=="" (
-   SET ERROR_MESSAGE=version not defined in ..\04_settings\02_version.cmd
+   SET ERROR_MESSAGE=version not defined in ..\_set\02_version.cmd
    GOTO ERROR_EXIT
    )
 
 IF "%output_dir%"=="" (
-   SET ERROR_MESSAGE=output_dir not defined in ..\04_settings\04_folders.cmd
+   SET ERROR_MESSAGE=output_dir not defined in ..\_set\04_folders.cmd
    GOTO ERROR_EXIT
    )
 
 IF "%backup_dir%"=="" (
-   SET ERROR_MESSAGE=backup_dir not defined in ..\04_settings\04_folders.cmd
+   SET ERROR_MESSAGE=backup_dir not defined in ..\_set\04_folders.cmd
    GOTO ERROR_EXIT
    )
 
@@ -105,7 +107,7 @@ IF EXIST "%output_dir%\%extensionprefix%%extension%_%version%.zip" (
 :: Copy files for update server
 :: /y = don't prompt when overwriting files from source that already exist in destination.
 ::
-xcopy ..\00_dev_code\update_server\* "%output_dir%\" /y
+xcopy ..\code\src\update_server\* "%output_dir%\" /y
 
 ECHO.
 ECHO %me%: **************************************
@@ -114,9 +116,14 @@ ECHO %me%: Start creating the %extensionprefix%%extension%_%version%.zip extensi
 ECHO %me%: **************************************
 ECHO.
 
+
+ECHO STAP 2
+CD 
+PAUSE
+
 :: Create the installable extension zip file
 :: 
-"C:\Program Files\7-Zip\7z.exe" a -tzip "%output_dir%\%extensionprefix%%extension%_%version%.zip" "..\00_dev_code\*" -xr@"..\04_settings\files_to_exclude_in_zip.txt"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "%output_dir%\%extensionprefix%%extension%_%version%.zip" "..\code\src\*" -xr@"..\code\set\files_to_exclude_in_zip.txt"
 
 ECHO.
 ECHO %me%: **************************************
