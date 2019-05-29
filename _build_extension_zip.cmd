@@ -32,8 +32,8 @@ SET ERROR_MESSAGE=errorfree
 
 CD "%cmd_dir%"
 CD ..\_set\
-IF EXIST 00_name.cmd (
-   CALL 00_name.cmd
+IF EXIST name.cmd (
+   CALL name.cmd
 ) ELSE (
    SET ERROR_MESSAGE=File with extension name settings doesn't exist
    GOTO ERROR_EXIT
@@ -41,8 +41,8 @@ IF EXIST 00_name.cmd (
 
 CD "%cmd_dir%"
 CD ..\_set\
-IF EXIST 02_version.cmd (
-   CALL 02_version.cmd
+IF EXIST version.cmd (
+   CALL version.cmd
 ) ELSE (
    SET ERROR_MESSAGE=File with version info settings doesn't exist
    GOTO ERROR_EXIT
@@ -63,12 +63,12 @@ IF EXIST 04_folders.cmd (
 :: Check if required environment variables are set correctly
 ::
 IF "%extension%"=="" (
-   SET ERROR_MESSAGE=extension not defined in ..\_set\00_name.cmd
+   SET ERROR_MESSAGE=extension not defined in ..\_set\name.cmd
    GOTO ERROR_EXIT
    )
 
 IF "%version%"=="" (
-   SET ERROR_MESSAGE=version not defined in ..\_set\02_version.cmd
+   SET ERROR_MESSAGE=version not defined in ..\_set\version.cmd
    GOTO ERROR_EXIT
    )
 
@@ -115,11 +115,6 @@ ECHO %me%: %DATE% %TIME%
 ECHO %me%: Start creating the %extensionprefix%%extension%_%version%.zip extension file
 ECHO %me%: **************************************
 ECHO.
-
-
-ECHO STAP 2
-CD 
-PAUSE
 
 :: Create the installable extension zip file
 :: 
