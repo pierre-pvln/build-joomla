@@ -1,11 +1,16 @@
 :: Name:     _build_extension_zip.cmd
-:: Purpose:  Create the module zip file which can be installed in Joomla!
+:: Purpose:  Create the extension zip file which can be installed in a Joomla! website
 :: Author:   pierre@pvln.nl
 ::
 :: Required environment variables
 :: ==============================
 ::
 :: NONE
+::
+:: struc_utils_folder        ..\struc\utils\
+:: global_settings_folder    ..\_set\
+:: source_code_folder        ..\code\src\
+:: update_server_folder      ..\code\src\update_server
 ::
 @ECHO off
 SETLOCAL ENABLEEXTENSIONS
@@ -28,6 +33,7 @@ SET ERROR_MESSAGE=errorfree
 :: ================
 
 CD "%cmd_dir%"
+:: struc_utils_folder
 CD ..\struc\utils\
 IF EXIST name.cmd (
    CALL name.cmd
@@ -37,6 +43,7 @@ IF EXIST name.cmd (
 )
 
 CD "%cmd_dir%"
+:: struc_utils_folder
 CD ..\struc\utils\
 IF EXIST version.cmd (
    CALL version.cmd
@@ -46,6 +53,7 @@ IF EXIST version.cmd (
 )
 
 CD "%cmd_dir%"
+:: global_settings_folder
 CD ..\_set\
 IF EXIST 04_folders.cmd (
    CALL 04_folders.cmd
@@ -103,6 +111,7 @@ IF EXIST "%output_dir%\%extensionprefix%%extension%_%version%.zip" (
 :: Copy files for update server
 :: /y = don't prompt when overwriting files from source that already exist in destination.
 ::
+:: update_server_folder
 xcopy ..\code\src\update_server\* "%output_dir%\" /y
 
 ECHO.

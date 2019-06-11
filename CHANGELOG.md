@@ -1,6 +1,11 @@
 --- 
 #  Changelog Scripts: Generic Joomla! extension build scripts
 ---
+<h4>v.0.1.0 2019-06-11</h4>
+<li>Updated README.md to new structure</li>
+<li>Default settings for folders as comment added</li>
+</ul>
+
 <h4>v.0.0.2 2019-06-03</h4>
 <li>Updated to new structure</li> 
 <li>Versioning now in file in src folder</li> 

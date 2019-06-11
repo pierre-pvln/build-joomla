@@ -1,1 +1,2 @@
-- Update the tekst in README.md to show correct folder/driectory structure 
+- Find a way to use default settings for folders unless otherwise specified
+  Where/how to specify otherwise. 
