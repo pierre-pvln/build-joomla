@@ -1,14 +1,17 @@
-:: Name:     01_build_extension_zip.cmd
-:: Purpose:  Create the module zip file which can be installed in Joomla!
-:: Author:   pierre.veelen@pvln.nl
-:: Revision: 2016 03 26 - initial version
-::           2016 07 17 - backup of older module files added
-::           2016 07 23 - version for zip output file added	and update server added
-::           2016 08 01 - versioning applyed through seperate set_version.cmd
-::           2017 03 26 - module name as variable included
-::           2018 02 09 - folderstructure and updateserver changed 
-::           2018 07 24 - build process unified and extension as environment variable
-
+:: Name:     _build_extension_zip.cmd
+:: Purpose:  Create the extension zip file which can be installed in a Joomla! website
+:: Author:   pierre@pvln.nl
+::
+:: Required environment variables
+:: ==============================
+::
+:: NONE
+::
+:: struc_utils_folder        ..\struc\utils\
+:: global_settings_folder    ..\_set\
+:: source_code_folder        ..\code\src\
+:: update_server_folder      ..\code\src\update_server
+::
 @ECHO off
 SETLOCAL ENABLEEXTENSIONS
 
@@ -28,58 +31,61 @@ SET ERROR_MESSAGE=errorfree
 
 :: STATIC VARIABLES
 :: ================
-CD ..\04_settings\
 
-IF EXIST 00_name.cmd (
-   CALL 00_name.cmd
+CD "%cmd_dir%"
+:: struc_utils_folder
+CD ..\struc\utils\
+IF EXIST name.cmd (
+   CALL name.cmd
 ) ELSE (
-   SET ERROR_MESSAGE=File with extension name settings doesn't exist
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] file with extension name settings doesn't exist ...
    GOTO ERROR_EXIT
 )
 
-IF EXIST 02_version.cmd (
-   CALL 02_version.cmd
+CD "%cmd_dir%"
+:: struc_utils_folder
+CD ..\struc\utils\
+IF EXIST version.cmd (
+   CALL version.cmd
 ) ELSE (
-   SET ERROR_MESSAGE=File with version info settings doesn't exist
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] file with version info settings doesn't exist ...
    GOTO ERROR_EXIT
 )
 
+CD "%cmd_dir%"
+:: global_settings_folder
+CD ..\_set\
 IF EXIST 04_folders.cmd (
    CALL 04_folders.cmd
 ) ELSE (
-   SET ERROR_MESSAGE=File with folder settings doesn't exist
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] file with folder settings doesn't exist ...
    GOTO ERROR_EXIT
 )
 
 :: STATIC VARIABLES
 :: ================
-::CALL ..\04_settings\00_name.cmd
-::CALL ..\04_settings\02_version.cmd
-::CALL ..\04_settings\04_folders.cmd
-
 
 :: Check if required environment variables are set correctly
 ::
 IF "%extension%"=="" (
-   SET ERROR_MESSAGE=extension not defined in ..\04_settings\00_name.cmd
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] extension not defined in ..\struc\utils\name.cmd ...
    GOTO ERROR_EXIT
    )
 
 IF "%version%"=="" (
-   SET ERROR_MESSAGE=version not defined in ..\04_settings\02_version.cmd
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] version not defined in ..\struc\utils\version.cmd ...
    GOTO ERROR_EXIT
    )
 
 IF "%output_dir%"=="" (
-   SET ERROR_MESSAGE=output_dir not defined in ..\04_settings\04_folders.cmd
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] output_dir not defined in ..\_set\04_folders.cmd ...
    GOTO ERROR_EXIT
    )
 
 IF "%backup_dir%"=="" (
-   SET ERROR_MESSAGE=backup_dir not defined in ..\04_settings\04_folders.cmd
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] backup_dir not defined in ..\_set\04_folders.cmd ...
    GOTO ERROR_EXIT
    )
-
    
 CD "%cmd_dir%"
 
@@ -105,7 +111,8 @@ IF EXIST "%output_dir%\%extensionprefix%%extension%_%version%.zip" (
 :: Copy files for update server
 :: /y = don't prompt when overwriting files from source that already exist in destination.
 ::
-xcopy ..\00_dev_code\update_server\* "%output_dir%\" /y
+:: update_server_folder
+xcopy ..\code\src\update_server\* "%output_dir%\" /y
 
 ECHO.
 ECHO %me%: **************************************
@@ -116,7 +123,7 @@ ECHO.
 
 :: Create the installable extension zip file
 :: 
-"C:\Program Files\7-Zip\7z.exe" a -tzip "%output_dir%\%extensionprefix%%extension%_%version%.zip" "..\00_dev_code\*" -xr@"..\04_settings\files_to_exclude_in_zip.txt"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "%output_dir%\%extensionprefix%%extension%_%version%.zip" "..\code\src\*" -xr@"..\code\set\files_to_exclude_in_zip.txt"
 
 ECHO.
 ECHO %me%: **************************************
@@ -130,7 +137,7 @@ GOTO CLEAN_EXIT
 :ERROR_EXIT
 cd "%cmd_dir%" 
 ECHO *******************
-ECHO Error: %ERROR_MESSAGE%
+ECHO %ERROR_MESSAGE%
 ECHO *******************
 
    
