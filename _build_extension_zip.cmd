@@ -37,8 +37,6 @@ SET ERROR_MESSAGE=errorfree
 :: STATIC VARIABLES
 :: ================
 
-ECHO %cmd_dir%
-
 CD "%cmd_dir%"
 :: struc_utils_folder
 CD ..\struc\utils\
