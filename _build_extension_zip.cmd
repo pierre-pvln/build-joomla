@@ -25,12 +25,19 @@ SET parent=%~p0
 SET drive=%~d0
 :: Setting the directory and drive of this commandfile
 SET cmd_dir=%~dp0
-
+::
+:: (re)set environment variables
+::
+SET VERBOSE=YES
+::
 :: Setting for Error messages
+::
 SET ERROR_MESSAGE=errorfree
 
 :: STATIC VARIABLES
 :: ================
+
+ECHO %cmd_dir%
 
 CD "%cmd_dir%"
 :: struc_utils_folder
@@ -55,8 +62,8 @@ IF EXIST version.cmd (
 CD "%cmd_dir%"
 :: global_settings_folder
 CD ..\_set\
-IF EXIST 04_folders.cmd (
-   CALL 04_folders.cmd
+IF EXIST folders.cmd (
+   CALL folders.cmd
 ) ELSE (
    SET ERROR_MESSAGE=[ERROR] [%~n0 ] file with folder settings doesn't exist ...
    GOTO ERROR_EXIT
@@ -78,12 +85,12 @@ IF "%version%"=="" (
    )
 
 IF "%output_dir%"=="" (
-   SET ERROR_MESSAGE=[ERROR] [%~n0 ] output_dir not defined in ..\_set\04_folders.cmd ...
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] output_dir not defined in ..\_set\folders.cmd ...
    GOTO ERROR_EXIT
    )
 
 IF "%backup_dir%"=="" (
-   SET ERROR_MESSAGE=[ERROR] [%~n0 ] backup_dir not defined in ..\_set\04_folders.cmd ...
+   SET ERROR_MESSAGE=[ERROR] [%~n0 ] backup_dir not defined in ..\_set\folders.cmd ...
    GOTO ERROR_EXIT
    )
    
