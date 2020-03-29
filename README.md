@@ -3,7 +3,7 @@
 --- 		
 Generic build scripts for Joomla! website extensions.<br/>
 <br/>
-* Documentation and download extension: http://www.pvln.nl/build-joomla-extensions<br/>
+Documentation and download extension: http://www.pvln.nl/build-joomla-extensions<br/>
 <br/>
 Below folder structure should be present on the workstation on which development is done:<br/>
 <br/>
